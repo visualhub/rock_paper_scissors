@@ -1,14 +1,18 @@
+// game_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GameController extends GetxController {
   RxBool isPlaying = false.obs;
-  final selection = "".obs;
-  final playerSelection = "".obs;
-  final result = "".obs;
+  final selection = ''.obs;
+  final playerSelection = ''.obs;
+  final result = ''.obs;
 
   void startGame() {
     isPlaying.value = true;
+    result.value = '';
+    playerSelection.value = '';
+    selection.value = '';
     _gameCardSelection();
   }
 
@@ -30,7 +34,7 @@ class GameController extends GetxController {
 
   void checkUserInput() {
     if (selection.value == playerSelection.value) {
-      result.value = 'It\'s a draw!';
+      result.value = "It's a draw!";
     } else if ((selection.value == 'rock' &&
             playerSelection.value == 'paper') ||
         (selection.value == 'paper' && playerSelection.value == 'scissors') ||
@@ -42,13 +46,5 @@ class GameController extends GetxController {
     isPlaying.value = false;
     debugPrint(playerSelection.value);
     debugPrint(result.value);
-  }
-
-  void endGame() {
-    isPlaying.value = false;
-    Get.snackbar(
-      'Game Over',
-      'Your Loos',
-    );
   }
 }

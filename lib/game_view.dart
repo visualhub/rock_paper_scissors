@@ -1,3 +1,4 @@
+// game_view.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,13 +10,14 @@ class GameView extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
+    return CupertinoPageScaffold(
+      child: Container(
+        color: Colors.black12,
         padding: const EdgeInsets.symmetric(
           vertical: 20,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Obx(
               () => Text('Results: ${controller.result.value}'),
@@ -28,6 +30,9 @@ class GameView extends GetView<GameController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  const Text(
+                    'Hello World!',
+                  ),
                   Obx(
                     () => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -35,26 +40,29 @@ class GameView extends GetView<GameController> {
                         _gameTile(
                           gameCard: true,
                           svgPicture: SvgPicture.asset(
-                              'assets/icons/svgs/scissors.svg',
-                              color: controller.selection.value == 'scissors'
-                                  ? Colors.blue
-                                  : Colors.black),
+                            'assets/icons/svgs/scissors.svg',
+                            color: controller.selection.value == 'scissors'
+                                ? Colors.blue
+                                : Colors.black,
+                          ),
                         ),
                         _gameTile(
                           gameCard: true,
                           svgPicture: SvgPicture.asset(
-                              'assets/icons/svgs/rock.svg',
-                              color: controller.selection.value == 'rock'
-                                  ? Colors.blue
-                                  : Colors.black),
+                            'assets/icons/svgs/rock.svg',
+                            color: controller.selection.value == 'rock'
+                                ? Colors.blue
+                                : Colors.black,
+                          ),
                         ),
                         _gameTile(
                           gameCard: true,
                           svgPicture: SvgPicture.asset(
-                              'assets/icons/svgs/paper.svg',
-                              color: controller.selection.value == 'paper'
-                                  ? Colors.blue
-                                  : Colors.black),
+                            'assets/icons/svgs/paper.svg',
+                            color: controller.selection.value == 'paper'
+                                ? Colors.blue
+                                : Colors.black,
+                          ),
                         ),
                       ],
                     ),
@@ -64,35 +72,37 @@ class GameView extends GetView<GameController> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _gameTile(
-                          onTap: () {
-                            controller.userCardSelection('rock');
-                          },
+                          onTap: controller.isPlaying.value
+                              ? () {
+                                  controller.userCardSelection('rock');
+                                }
+                              : null,
                           svgPicture: SvgPicture.asset(
-                              'assets/icons/svgs/rock.svg',
-                              color: controller.playerSelection.value == 'rock'
-                                  ? Colors.green
-                                  : Colors.black),
+                            'assets/icons/svgs/rock.svg',
+                            color: _getCardColor('rock'),
+                          ),
                         ),
                         _gameTile(
-                          onTap: () {
-                            controller.userCardSelection('paper');
-                          },
+                          onTap: controller.isPlaying.value
+                              ? () {
+                                  controller.userCardSelection('paper');
+                                }
+                              : null,
                           svgPicture: SvgPicture.asset(
-                              'assets/icons/svgs/paper.svg',
-                              color: controller.playerSelection.value == 'paper'
-                                  ? Colors.green
-                                  : Colors.black),
+                            'assets/icons/svgs/paper.svg',
+                            color: _getCardColor('paper'),
+                          ),
                         ),
                         _gameTile(
-                          onTap: () {
-                            controller.userCardSelection('scissors');
-                          },
+                          onTap: controller.isPlaying.value
+                              ? () {
+                                  controller.userCardSelection('scissors');
+                                }
+                              : null,
                           svgPicture: SvgPicture.asset(
-                              'assets/icons/svgs/scissors.svg',
-                              color:
-                                  controller.playerSelection.value == 'scissors'
-                                      ? Colors.green
-                                      : Colors.black),
+                            'assets/icons/svgs/scissors.svg',
+                            color: _getCardColor('scissors'),
+                          ),
                         ),
                       ],
                     ),
@@ -102,8 +112,9 @@ class GameView extends GetView<GameController> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(12)),
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     height: 60,
                     width: 120,
                     child: CupertinoButton(
@@ -118,7 +129,7 @@ class GameView extends GetView<GameController> {
                         controller.startGame();
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -126,6 +137,21 @@ class GameView extends GetView<GameController> {
         ),
       ),
     );
+  }
+
+  Color _getCardColor(String cardType) {
+    return controller.playerSelection.value == cardType
+        ? _getResultColor()
+        : Colors.black;
+  }
+
+  Color _getResultColor() {
+    return switch (controller.result.value) {
+      'You win!' => Colors.green,
+      "It's a draw!" => Colors.blue,
+      "Computer wins!" => Colors.red,
+      _ => Colors.black,
+    };
   }
 
   SizedBox _gameTile({
@@ -155,10 +181,4 @@ class GameView extends GetView<GameController> {
       ),
     );
   }
-}
-
-enum Game {
-  rock,
-  paper,
-  scissors,
 }

@@ -1,3 +1,4 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rock_paper_scissors/game_controller.dart';
@@ -13,13 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(GameController());
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const GameView(),
+    return const GetCupertinoApp(
+      title: 'Rock, Paper, Scissors',
+      home: GameView(),
     );
   }
 }
